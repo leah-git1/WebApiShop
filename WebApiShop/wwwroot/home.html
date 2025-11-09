@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script defer src="home.js"></script>
+    <title>webApi</title>
+    <style>
+        .content {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .existUser {
+            display: flex;
+            flex-direction: column;
+            width: 20vw;
+            margin: 2vw;
+        }
+
+        .newUser {
+            display: flex;
+            flex-direction: column;
+            width: 20vw;
+            margin: 2vw;
+            /*            display:none;*/
+        }
+    </style>
+</head>
+<body>
+    <!--<button onClick="getResponse()">get Api</button>
+    <button onClick="postResponse()">post Api</button>-->
+    <div class="content">
+        <div class="existUser">
+            <h3>משתמש רשום</h3>
+            <lable for="existUserName">שם משתמש</lable>
+            <input type="email" id="existUserName" srequired />
+            <lable for="existPassword">סיסמא</lable>
+            <input type="password" id="existPassword" required />
+            <button onClick="login()">התחברות</button>
+            <a href="home.html">משתמש חדש</a>
+        </div>
+
+        <div class="newUser">
+            <h3>משתמש חדש</h3>
+            <lable for="userName">שם משתמש</lable>
+            <input type="email" id="userName" name="userName" required />
+            <lable for="firstName">שם פרטי</lable>
+            <input type="text" id="firstName" name="firstName" required />
+            <lable for="lastName">שם משפחה</lable>
+            <input type="text" id="lastName" name="lastName" required />
+            <lable for="password">סיסמא</lable>
+            <input type="password" id="password" name="password" required />
+            <button onClick="register()">רישום</button>
+        </div>
+
+    </div>
+</body>
+</html>
