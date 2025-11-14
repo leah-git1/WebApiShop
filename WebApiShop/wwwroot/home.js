@@ -30,7 +30,25 @@ async function login() {
     }
 }
 
+async function checkStrengthPassword() {
+    const password = document.querySelector("#password").value
+    const progress = document.querySelector("progress")
 
+    const response = await fetch(`api/Password`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        //body: JSON.stringify(loginUser)
+        body: JSON.stringify(password)
+    });
+
+    const data = await response.json();
+    console.log(data)
+    if (response.status == 200) {
+        progress.value = data.strength/4
+    } 
+}
 
 async function register() {
 
@@ -58,10 +76,15 @@ async function register() {
 
     const userData = await response.json();
     console.log('POST Data:', userData)
-    sessionStorage.setItem("user", JSON.stringify(userData));
-    let user = sessionStorage.getItem("user");
-    alert("המשתמש נרשם בהצלחה")
-    return currentUser = JSON.parse(user);
+    if (response.status == 201) {
+        sessionStorage.setItem("user", JSON.stringify(userData));
+        let user = sessionStorage.getItem("user");
+        alert("המשתמש נרשם בהצלחה")
+        return currentUser = JSON.parse(user);
+    }
+    else {
+        alert("הכנס סיסמא חזקה יותר");
+    }
 }
 
 

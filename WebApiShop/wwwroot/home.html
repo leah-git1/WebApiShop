@@ -50,7 +50,11 @@
             <input type="text" id="lastName" name="lastName" required />
             <lable for="password">סיסמא</lable>
             <input type="password" id="password" name="password" required />
+            <button onClick="checkStrengthPassword()">בדוק חוזק סיסמה</button>
             <button onClick="register()">רישום</button>
+            <div class="progressBar">
+                <progress value="0"></progress>
+            </div>
         </div>
 
     </div>

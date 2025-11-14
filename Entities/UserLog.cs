@@ -1,8 +1,8 @@
-﻿namespace WebApiShop
+﻿namespace Entities
 {
     public class UserLog
     {
         public string userName { get; set; }
-        public int password { get; set; }
+        public string password { get; set; }
     }
 }

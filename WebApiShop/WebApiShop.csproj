@@ -16,4 +16,8 @@
     <EditorConfigFiles Remove="C:\Users\329114565\Desktop\WebApiShop - Copy\WebApiShop\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
 </Project>
