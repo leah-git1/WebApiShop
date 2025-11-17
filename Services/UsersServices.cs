@@ -3,29 +3,43 @@ using Repository;
 
 namespace Services
 {
-    public class UsersServices
+    public class UsersServices : IUsersRepository, IUsersServices
     {
-        UsersRepository repository = new UsersRepository();
-        PasswordService passwordService = new PasswordService();
-        public User getUserById(int id)
+        IUsersRepository _iUsersRepository;
+        IPasswordService _iPasswordService;
+        public UsersServices(IUsersRepository iusersRepository, IPasswordService passwordService)
         {
-            return repository.getUserById(id);
+            this._iUsersRepository = iusersRepository;
+            this._iPasswordService = passwordService;
         }
 
-        public User registerUser(User user) {
-            CheckPassword checkPassword =  passwordService.checkStrengthPassword(user.password);
+        public User getUserById(int id)
+        {
+            return _iUsersRepository.getUserById(id);
+        }
+
+        public User registerUser(User user)
+        {
+            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.password);
             if (checkPassword.strength < 2)
             {
                 return null;
             }
-            return repository.registerUser(user);
+            return _iUsersRepository.registerUser(user);
         }
         public User loginUser(UserLog userToLog)
         {
-            return repository.loginUser(userToLog);
+            return _iUsersRepository.loginUser(userToLog);
         }
-        public void updateUser(User user, int id) {
-            repository.updateUser(user, id);
-        }   
+        public User updateUser(User user, int id)
+        {
+            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.password);
+            if (checkPassword.strength < 2)
+            {
+                return null;
+            }
+            return _iUsersRepository.updateUser(user, id);
+
+        }
     }
 }

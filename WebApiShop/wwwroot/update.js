@@ -27,15 +27,16 @@ async function update() {
             },
             body: JSON.stringify(updateUserData)
         });
-    updateUserData = {
-        userId,
-        firstName,
-        lastName,
-        userName,
-        password
-    };
-    const userData = await response;
-    sessionStorage.setItem("user", JSON.stringify(updateUserData));
-    alert("עודכנו הפרטים")
+    
+    
+    if (response.status == 201) {
+        const userData = await response.json();
+        sessionStorage.setItem("user", JSON.stringify(updateUserData));
+        alert("עודכנו הפרטים")
+    }
+    else {
+        alert("הכנס סיסמא חזקה יותר")
+    }
+    
 
 }

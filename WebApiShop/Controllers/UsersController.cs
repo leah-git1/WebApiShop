@@ -11,7 +11,13 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        UsersServices service = new UsersServices();
+        IUsersServices _iUsersServices;
+        IPasswordService _passwordService;
+        public UsersController(IUsersServices iUsersServices, IPasswordService passwordService) { 
+            _iUsersServices = iUsersServices;
+            _passwordService = passwordService;
+        }
+        
         // GET: api/<UserController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -24,7 +30,7 @@ namespace WebApiShop.Controllers
         [HttpGet("{id}")]
         public ActionResult<User> Get(int ind)
         {
-            User user = service.getUserById(ind);
+            User user = _iUsersServices.getUserById(ind);
             if(user == null)            
                 return NoContent();
             return Ok(user);
@@ -35,7 +41,7 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
-            User postUser = service.registerUser(user);
+            User postUser = _iUsersServices.registerUser(user);
             if (postUser == null)
                 return BadRequest();
             return CreatedAtAction(nameof(Get), new { id = postUser.userId }, postUser);
@@ -44,7 +50,7 @@ namespace WebApiShop.Controllers
         [HttpPost("login")]
         public ActionResult<User> Post([FromBody] UserLog userToLog)
         {
-            User user = service.loginUser(userToLog);
+            User user = _iUsersServices.loginUser(userToLog);
             if (user == null)
                 return NoContent();
             return CreatedAtAction(nameof(Get), new { id = user.userId }, user);
@@ -52,9 +58,13 @@ namespace WebApiShop.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public void Put([FromBody] User userToUpdate, int id)
+        public ActionResult<User> Put([FromBody] User userToUpdate, int id)
         {
-            service.updateUser(userToUpdate,id);
+            User user = _iUsersServices.updateUser(userToUpdate, id);
+            if (user == null)
+                return BadRequest();
+            return CreatedAtAction(nameof(Get), new { id = user.userId }, user);
+            
         }
 
         // DELETE api/<UserController>/5
