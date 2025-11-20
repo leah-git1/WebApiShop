@@ -4,6 +4,6 @@ namespace Services
 {
     public interface IPasswordService
     {
-        CheckPassword checkStrengthPassword(string password);
+        CheckPassword CheckStrengthPassword(string password);
     }
 }
