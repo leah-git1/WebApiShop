@@ -21,11 +21,6 @@ namespace Services
 
         public User RegisterUser(User user)
         {
-            CheckPassword checkPassword = _passwordService.CheckStrengthPassword(user.Password);
-            if (checkPassword.Strength < 2)
-            {
-                return null;
-            }
             return _usersRepository.RegisterUser(user);
         }
         
@@ -36,13 +31,7 @@ namespace Services
         
         public User UpdateUser(User user, int id)
         {
-            CheckPassword checkPassword = _passwordService.CheckStrengthPassword(user.Password);
-            if (checkPassword.Strength < 2)
-            {
-                return null;
-            }
             return _usersRepository.UpdateUser(user, id);
-
         }
     }
 }
