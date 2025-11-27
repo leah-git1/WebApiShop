@@ -11,28 +11,23 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        IUsersServices _iUsersServices;
-        IPasswordService _passwordService;
-        public UsersController(IUsersServices iUsersServices, IPasswordService passwordService) { 
-            _iUsersServices = iUsersServices;
+        private readonly IUsersServices _usersServices;
+        private readonly IPasswordService _passwordService;
+        
+        public UsersController(IUsersServices usersServices, IPasswordService passwordService) { 
+            _usersServices = usersServices;
             _passwordService = passwordService;
         }
+    
         
-        // GET: api/<UserController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            
-           return new string[] { "user1", "user2" };
-        }
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public ActionResult<User> Get(int ind)
+        public ActionResult<User> Get(int id)
         {
-            User user = _iUsersServices.getUserById(ind);
+            User user = _usersServices.GetUserById(id);
             if(user == null)            
-                return NoContent();
+                return NotFound();
             return Ok(user);
         }
 
@@ -41,36 +36,37 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
-            User postUser = _iUsersServices.registerUser(user);
+            CheckPassword checkPassword = _passwordService.CheckStrengthPassword(user.Password);
+            if (checkPassword.Strength < 2)
+                return BadRequest($"Password too weak (score: {checkPassword.Strength}/4). Minimum required: 2");
+
+            User postUser = _usersServices.RegisterUser(user);
             if (postUser == null)
-                return BadRequest();
-            return CreatedAtAction(nameof(Get), new { id = postUser.userId }, postUser);
+                return BadRequest("Failed to register user");
+            return CreatedAtAction(nameof(Get), new { id = postUser.UserId }, postUser);
         }
 
         [HttpPost("login")]
-        public ActionResult<User> Post([FromBody] UserLog userToLog)
+        public ActionResult<User> Login([FromBody] UserLog userToLog)
         {
-            User user = _iUsersServices.loginUser(userToLog);
+            User user = _usersServices.LoginUser(userToLog);
             if (user == null)
-                return NoContent();
-            return CreatedAtAction(nameof(Get), new { id = user.userId }, user);
+                return Unauthorized();
+            return Ok(user);
         }
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public ActionResult<User> Put([FromBody] User userToUpdate, int id)
+        public ActionResult Put(int id, [FromBody] User userToUpdate)
         {
-            User user = _iUsersServices.updateUser(userToUpdate, id);
-            if (user == null)
-                return BadRequest();
-            return CreatedAtAction(nameof(Get), new { id = user.userId }, user);
-            
-        }
+            CheckPassword checkPassword = _passwordService.CheckStrengthPassword(userToUpdate.Password);
+            if (checkPassword.Strength < 2)
+                return BadRequest($"Password too weak (score: {checkPassword.Strength}/4). Minimum required: 2");
 
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            User user = _usersServices.UpdateUser(userToUpdate, id);
+            if (user == null)
+                return BadRequest("Failed to update user");
+            return NoContent();
         }
     }
 }

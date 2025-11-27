@@ -5,41 +5,33 @@ namespace Services
 {
     public class UsersServices : IUsersRepository, IUsersServices
     {
-        IUsersRepository _iUsersRepository;
-        IPasswordService _iPasswordService;
-        public UsersServices(IUsersRepository iusersRepository, IPasswordService passwordService)
+        private readonly IUsersRepository _usersRepository;
+        private readonly IPasswordService _passwordService;
+        
+        public UsersServices(IUsersRepository usersRepository, IPasswordService passwordService)
         {
-            this._iUsersRepository = iusersRepository;
-            this._iPasswordService = passwordService;
+            _usersRepository = usersRepository;
+            _passwordService = passwordService;
         }
 
-        public User getUserById(int id)
+        public User GetUserById(int id)
         {
-            return _iUsersRepository.getUserById(id);
+            return _usersRepository.GetUserById(id);
         }
 
-        public User registerUser(User user)
+        public User RegisterUser(User user)
         {
-            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.password);
-            if (checkPassword.strength < 2)
-            {
-                return null;
-            }
-            return _iUsersRepository.registerUser(user);
+            return _usersRepository.RegisterUser(user);
         }
-        public User loginUser(UserLog userToLog)
+        
+        public User LoginUser(UserLog userToLog)
         {
-            return _iUsersRepository.loginUser(userToLog);
+            return _usersRepository.LoginUser(userToLog);
         }
-        public User updateUser(User user, int id)
+        
+        public User UpdateUser(User user, int id)
         {
-            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.password);
-            if (checkPassword.strength < 2)
-            {
-                return null;
-            }
-            return _iUsersRepository.updateUser(user, id);
-
+            return _usersRepository.UpdateUser(user, id);
         }
     }
 }

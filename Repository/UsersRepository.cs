@@ -5,59 +5,59 @@ namespace Repository
 {
     public class UsersRepository : IUsersRepository
     {
-        string filePath = "M:\\WebApiShop - Copy\\Repository\\usersFile.txt";
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "usersFile.txt");
 
-        public User getUserById(int ind)
+        public User GetUserById(int id)
         {
 
-            using (StreamReader reader = System.IO.File.OpenText(filePath))
+            using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
                 string? currentUserInFile;
                 while ((currentUserInFile = reader.ReadLine()) != null)
                 {
                     User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.userId == ind)
+                    if (user.UserId == id)
                         return user;
                 }
             }
             return null;
         }
 
-        public User registerUser(User user)
+        public User RegisterUser(User user)
         {
-            int numberOfUsers = System.IO.File.ReadLines(filePath).Count();
-            user.userId = numberOfUsers + 1;
+            int numberOfUsers = System.IO.File.ReadLines(_filePath).Count();
+            user.UserId = numberOfUsers + 1;
             string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText(filePath, userJson + Environment.NewLine);
+            System.IO.File.AppendAllText(_filePath, userJson + Environment.NewLine);
             return user;
         }
 
-        public User loginUser(UserLog userToLog)
+        public User LoginUser(UserLog userToLog)
         {
-            using (StreamReader reader = System.IO.File.OpenText(filePath))
+            using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
                 string? currentUserInFile;
                 while ((currentUserInFile = reader.ReadLine()) != null)
                 {
                     User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.userName == userToLog.userName && user.password == userToLog.password)
+                    if (user.UserName == userToLog.UserName && user.Password == userToLog.Password)
                         return user;
                 }
             }
             return null;
         }
 
-        public User updateUser(User userToUpdate, int id)
+        public User UpdateUser(User userToUpdate, int id)
         {
             string textToReplace = string.Empty;
-            using (StreamReader reader = System.IO.File.OpenText(filePath))
+            using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
                 string currentUserInFile;
                 while ((currentUserInFile = reader.ReadLine()) != null)
                 {
 
                     User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.userId == id)
+                    if (user.UserId == id)
                     {
                         textToReplace = currentUserInFile;
                     }
@@ -66,9 +66,9 @@ namespace Repository
 
             if (textToReplace != string.Empty)
             {
-                string text = System.IO.File.ReadAllText(filePath);
+                string text = System.IO.File.ReadAllText(_filePath);
                 text = text.Replace(textToReplace, JsonSerializer.Serialize(userToUpdate));
-                System.IO.File.WriteAllText(filePath, text);
+                System.IO.File.WriteAllText(_filePath, text);
                 
             }
             return userToUpdate;
