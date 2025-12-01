@@ -16,37 +16,15 @@ namespace WebApiShop.Controllers
             _iPasswordService = iPasswordService;
         }
        
-        // GET: api/<PasswordController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<PasswordController>/5
-        [HttpGet("{id}")]
-        public void Get(string password)
-        {
-             
-        }
+  
 
         // POST api/<PasswordController>
         [HttpPost]
-        public CheckPassword Post([FromBody] string password)
+        public ActionResult<CheckPassword> Post([FromBody] string password)
         {
-            return _iPasswordService.checkStrengthPassword(password);
+            return Ok(_iPasswordService.checkStrengthPassword(password));
         }
 
-        // PUT api/<PasswordController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<PasswordController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

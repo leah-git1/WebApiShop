@@ -18,13 +18,6 @@ namespace WebApiShop.Controllers
             _passwordService = passwordService;
         }
         
-        // GET: api/<UserController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            
-           return new string[] { "user1", "user2" };
-        }
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
@@ -62,15 +55,11 @@ namespace WebApiShop.Controllers
         {
             User user = await _iUsersServices.updateUser(userToUpdate, id);
             if (user == null)
-                return BadRequest();
+                return BadRequest("Password is not strong enough");
             return CreatedAtAction(nameof(Get), new { id = user.UserId }, user);
             
         }
 
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+
     }
 }
