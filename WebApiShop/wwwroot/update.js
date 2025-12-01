@@ -1,5 +1,5 @@
 ﻿const h1 = document.querySelector("h1")
-const currentUser = sessionStorage.getItem("user")
+const currentUser = sessionStorage.getItem("currentUser")
 h1.textContent = `שלום ${JSON.parse(currentUser).firstName} בוא נצלול פנימה`
 
 async function update() {

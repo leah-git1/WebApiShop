@@ -4,9 +4,9 @@ namespace Repository
 {
     public interface IUsersRepository
     {
-        User getUserById(int ind);
-        User loginUser(UserLog userToLog);
-        User registerUser(User user);
-        User updateUser(User userToUpdate, int id);
+        Task<User> getUserById(int ind);
+        Task<User> loginUser(UserLog userToLog);
+        Task<User> registerUser(User user);
+        Task<User> updateUser(User userToUpdate, int id);
     }
 }

@@ -13,32 +13,32 @@ namespace Services
             this._iPasswordService = passwordService;
         }
 
-        public User getUserById(int id)
+        public async Task<User> getUserById(int id)
         {
-            return _iUsersRepository.getUserById(id);
+            return await _iUsersRepository.getUserById(id);
         }
 
-        public User registerUser(User user)
+        public async Task<User> registerUser(User user)
         {
-            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.password);
+            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.Password);
             if (checkPassword.strength < 2)
             {
                 return null;
             }
-            return _iUsersRepository.registerUser(user);
+            return await _iUsersRepository.registerUser(user);
         }
-        public User loginUser(UserLog userToLog)
+        public async Task<User> loginUser(UserLog userToLog)
         {
-            return _iUsersRepository.loginUser(userToLog);
+            return await _iUsersRepository.loginUser(userToLog);
         }
-        public User updateUser(User user, int id)
+        public async Task<User> updateUser(User user, int id)
         {
-            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.password);
+            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.Password);
             if (checkPassword.strength < 2)
             {
                 return null;
             }
-            return _iUsersRepository.updateUser(user, id);
+            return await _iUsersRepository.updateUser(user, id);
 
         }
     }
