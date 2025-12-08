@@ -20,4 +20,6 @@ public partial class ProductTbl
     public string ProductPicture { get; set; }
 
     public virtual CategoriesTbl Category { get; set; }
+
+    public virtual ICollection<OrderItemsTbl> OrderItemsTbls { get; set; } = new List<OrderItemsTbl>();
 }

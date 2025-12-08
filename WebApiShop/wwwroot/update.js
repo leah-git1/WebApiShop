@@ -29,8 +29,8 @@ async function update() {
         });
     
     
-    if (response.status == 201) {
-        const userData = await response.json();
+    if (response.status == 204) {
+        const userData = await response;
         sessionStorage.setItem("user", JSON.stringify(updateUserData));
         alert("עודכנו הפרטים")
     }

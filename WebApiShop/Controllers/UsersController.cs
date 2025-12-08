@@ -51,13 +51,13 @@ namespace WebApiShop.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async  Task<ActionResult<User>> Put([FromBody] User userToUpdate, int id)
+        public async  Task<ActionResult> Put([FromBody] User userToUpdate, int id)
         {
             User user = await _iUsersServices.updateUser(userToUpdate, id);
             if (user == null)
                 return BadRequest("Password is not strong enough");
-            return CreatedAtAction(nameof(Get), new { id = user.UserId }, user);
-            
+            return NoContent();
+
         }
 
 
