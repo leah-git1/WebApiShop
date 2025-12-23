@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System.Text.Json;
+using NLog.Web;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,10 +13,10 @@ namespace WebApiShop.Controllers
     public class UsersController : ControllerBase
     {
         IUsersServices _iUsersServices;
-        IPasswordService _passwordService;
-        public UsersController(IUsersServices iUsersServices, IPasswordService passwordService) { 
+        private readonly ILogger<UsersController> _logger;
+        public UsersController(IUsersServices iUsersServices, ILogger<UsersController> logger) { 
             _iUsersServices = iUsersServices;
-            _passwordService = passwordService;
+            _logger = logger;
         }
         
 
@@ -45,7 +46,11 @@ namespace WebApiShop.Controllers
         {
             User user = await _iUsersServices.loginUser(userToLog);
             if (user == null)
+            {
+                _logger.LogInformation("User not exist");
                 return NoContent();
+            }
+            _logger.LogInformation("User login successfully: Name: {FullName}, Email: {Email}", $"{user.FirstName} {user.LastName}", user.UserName);
             return CreatedAtAction(nameof(Get), new { id = user.UserId }, user);
         }
 
