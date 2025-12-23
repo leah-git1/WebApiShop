@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using AutoMapper;
+using DTOs;
+using Entities;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -8,18 +10,22 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public class ProductService : IProductRepository, IProductService
+    public class ProductService : IProductService
     {
         IProductRepository _iProductRepository;
+        IMapper _mapper;
 
-        public ProductService(IProductRepository iProductRepository)
+        public ProductService(IProductRepository iProductRepository, IMapper mapper)
         {
             this._iProductRepository = iProductRepository;
+            _mapper = mapper;
         }
 
-        public async Task<List<ProductTbl>> getProducts(int[]? category_id, int? min_price, int? max_price, int? limit, int? page)
+        public async Task<List<LessInfoProductDTO>> getProducts(int[]? category_id, int? min_price, int? max_price, int? limit, int? page)
         {
-            return await _iProductRepository.getProducts(category_id, min_price, max_price, limit, page);
+            List<ProductTbl> products = await _iProductRepository.getProducts(category_id, min_price, max_price, limit, page);
+            List<LessInfoProductDTO> productsDTOs = _mapper.Map<List<ProductTbl>, List<LessInfoProductDTO>>(products);
+            return productsDTOs;
         }
     }
 }

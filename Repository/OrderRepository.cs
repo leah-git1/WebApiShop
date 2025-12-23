@@ -21,11 +21,11 @@ namespace Repository
             return await _ShopContext.OrdersTbls.FirstOrDefaultAsync(x => x.OrderId == ind);
         }
 
-        public async Task<OrdersTbl> Invite(OrdersTbl order)
+        public async Task<OrdersTbl> AddOrder(OrdersTbl order)
         {
             await _ShopContext.OrdersTbls.AddAsync(order);
             await _ShopContext.SaveChangesAsync();
-            return await _ShopContext.OrdersTbls.FindAsync(order.OrderId);
+            return order;
         }
     }
 }
