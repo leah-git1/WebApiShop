@@ -21,11 +21,21 @@ namespace Services
             _mapper = mapper;
         }
 
-        public async Task<List<LessInfoProductDTO>> getProducts(int[]? category_id, int? min_price, int? max_price, int? limit, int? page)
+        public async Task<PageResponseDTO<LessInfoProductDTO>> getProducts(int?[] categoryIds, int? min_price, int? max_price, int position, int skip)
         {
-            List<ProductTbl> products = await _iProductRepository.getProducts(category_id, min_price, max_price, limit, page);
-            List<LessInfoProductDTO> productsDTOs = _mapper.Map<List<ProductTbl>, List<LessInfoProductDTO>>(products);
-            return productsDTOs;
+            (List<ProductTbl>, int) response = await _iProductRepository.getProducts(categoryIds, min_price, max_price, position, skip);
+            List<LessInfoProductDTO> data = _mapper.Map<List<ProductTbl>, List<LessInfoProductDTO>>(response.Item1);
+            PageResponseDTO<LessInfoProductDTO> pageResponse = new();
+            pageResponse.Data = data;
+            pageResponse.TotalItems = response.Item2;
+            pageResponse.CurrentPage = position;
+            pageResponse.PageSize = skip;
+            pageResponse.HasPreviousPage = position > 1;
+            int numOfPages = pageResponse.TotalItems / skip;
+            if (pageResponse.TotalItems % skip != 0)
+                numOfPages++;
+            pageResponse.HasNextPage = position < numOfPages;
+            return pageResponse;
         }
     }
 }

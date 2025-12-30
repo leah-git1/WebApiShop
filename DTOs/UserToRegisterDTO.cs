@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace DTOs
 {
-    public record UserDTO
+    public record UserToRegisterDTO
     (
-        int UserId,
         string FirstName,
         string LastName,
-        string UserName,           
+        string UserName,
         string Password
     );
 }

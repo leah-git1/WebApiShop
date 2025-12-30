@@ -19,15 +19,15 @@ namespace WebApiShop.Controllers
 
         // GET api/<OrderController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MoreInfoOrderDTO>> getOrderById(int id)
+        public async Task<ActionResult<OrderMoreInfoDTO>> getOrderById(int id)
         {
             return await _iOrderService.getOrderById(id);
         }
         // POST api/<OrderController>
         [HttpPost]
-        public async Task<ActionResult<LessInfoOrderDTO>> Invite(OrdersTbl order)
+        public async Task<ActionResult<OrderDTO>> AddOrder(CreateOrderDTO order)
         {
-            LessInfoOrderDTO postOrder = await _iOrderService.AddOrder(order);
+            OrderDTO postOrder = await _iOrderService.AddOrder(order);
             if (postOrder == null)
                 return BadRequest();
             return CreatedAtAction(nameof(getOrderById), new { id = postOrder.OrderId }, postOrder);

@@ -1,44 +1,56 @@
-﻿using Entities;
+﻿using AutoMapper;
+using DTOs;
+using Entities;
 using Repository;
 
 namespace Services
 {
-    public class UsersServices : IUsersRepository, IUsersServices
+    public class UsersServices : IUsersServices
     {
         IUsersRepository _iUsersRepository;
         IPasswordService _iPasswordService;
-        public UsersServices(IUsersRepository iusersRepository, IPasswordService passwordService)
+        IMapper _mapper;
+
+        public UsersServices(IUsersRepository iusersRepository, IPasswordService passwordService, IMapper mapper)
         {
             this._iUsersRepository = iusersRepository;
             this._iPasswordService = passwordService;
+            this._mapper = mapper;
         }
 
-        public async Task<User> getUserById(int id)
+        public async Task<UserDTO> getUserById(int id)
         {
-            return await _iUsersRepository.getUserById(id);
+           User user = await _iUsersRepository.getUserById(id);
+           return _mapper.Map<User, UserDTO>(user);
         }
 
-        public async Task<User> registerUser(User user)
+        public async Task<UserDTO> registerUser(UserToRegisterDTO userToRegister)
         {
-            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.Password);
+            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(userToRegister.Password);
             if (checkPassword.strength < 2)
             {
                 return null;
             }
-            return await _iUsersRepository.registerUser(user);
+            User user = _mapper.Map<UserToRegisterDTO, User>(userToRegister);
+            user =  await _iUsersRepository.registerUser(user);
+            return _mapper.Map<User, UserDTO>(user);
         }
-        public async Task<User> loginUser(UserLog userToLog)
+        public async Task<UserDTO> loginUser(UserLog userToLog)
         {
-            return await _iUsersRepository.loginUser(userToLog);
+            User user = await _iUsersRepository.loginUser(userToLog);
+            return _mapper.Map<User, UserDTO>(user);
         }
-        public async Task<User> updateUser(User user, int id)
+        public async Task<UserDTO> updateUser(UserToRegisterDTO userToUpdate, int id)
         {
-            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(user.Password);
+            CheckPassword checkPassword = _iPasswordService.checkStrengthPassword(userToUpdate.Password);
             if (checkPassword.strength < 2)
             {
                 return null;
             }
-            return await _iUsersRepository.updateUser(user, id);
+            User user = _mapper.Map<UserToRegisterDTO, User>(userToUpdate);
+            user.UserId = id;
+            user = await _iUsersRepository.updateUser(user,id);
+            return _mapper.Map<User, UserDTO>(user);
 
         }
     }

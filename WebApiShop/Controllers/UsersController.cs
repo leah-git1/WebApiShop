@@ -1,8 +1,9 @@
-﻿using Entities;
+﻿using DTOs;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System.Text.Json;
-using NLog.Web;
+//using NLog.Web;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,9 +23,9 @@ namespace WebApiShop.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(int ind)
+        public async Task<ActionResult<UserDTO>> Get(int ind)
         {
-            User user = await _iUsersServices.getUserById(ind);
+            UserDTO user = await _iUsersServices.getUserById(ind);
             if(user == null)            
                 return NotFound();
             return Ok(user);
@@ -33,18 +34,18 @@ namespace WebApiShop.Controllers
         
         // POST api/<UserController>
         [HttpPost]
-        public async Task<ActionResult<User>> Post([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> Post([FromBody] UserToRegisterDTO user)
         {
-            User postUser = await _iUsersServices.registerUser(user);
+            UserDTO postUser = await _iUsersServices.registerUser(user);
             if (postUser == null)
                 return BadRequest();
             return CreatedAtAction(nameof(Get), new { id = postUser.UserId }, postUser);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Post([FromBody] UserLog userToLog)
+        public async Task<ActionResult<UserDTO>> Post([FromBody] UserLog userToLog)
         {
-            User user = await _iUsersServices.loginUser(userToLog);
+            UserDTO user = await _iUsersServices.loginUser(userToLog);
             if (user == null)
             {
                 _logger.LogInformation("User not exist");
@@ -56,15 +57,13 @@ namespace WebApiShop.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async  Task<ActionResult> Put([FromBody] User userToUpdate, int id)
+        public async  Task<ActionResult> Put([FromBody] UserToRegisterDTO userToUpdate, int id)
         {
-            User user = await _iUsersServices.updateUser(userToUpdate, id);
+            UserDTO user = await _iUsersServices.updateUser(userToUpdate, id);
             if (user == null)
                 return BadRequest("Password is not strong enough");
             return NoContent();
 
         }
-
-
     }
 }
