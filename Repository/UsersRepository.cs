@@ -7,10 +7,10 @@ namespace Repository
 {
     public class UsersRepository : IUsersRepository
     {
-        ShopContext _ShopContext;
-       public UsersRepository(ShopContext ShopContext)
+        private readonly ShopContext _shopContext;
+       public UsersRepository(ShopContext shopContext)
         {
-            this._ShopContext = ShopContext;
+            this._shopContext = shopContext;
         }
 
         public async Task<User> getUserById(int ind)

@@ -10,10 +10,10 @@ namespace Repository
 {
     public class OrderRepository : IOrderRepository
     {
-        ShopContext _ShopContext;
-        public OrderRepository(ShopContext ShopContext)
+        private readonly ShopContext _shopContext;
+        public OrderRepository(ShopContext shopContext)
         {
-            this._ShopContext = ShopContext;
+            this._shopContext = shopContext;
         }
 
         public async Task<OrdersTbl> getOrderById(int ind)

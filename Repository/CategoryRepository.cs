@@ -10,10 +10,10 @@ namespace Repository
 {
     public class CategoryRepository : ICategoryRepository
     {
-        ShopContext _ShopContext;
-        public CategoryRepository(ShopContext ShopContext)
+        private readonly ShopContext _shopContext;
+        public CategoryRepository(ShopContext shopContext)
         {
-            this._ShopContext = ShopContext;
+            this._shopContext = shopContext;
         }
 
         public async Task<List<CategoriesTbl>> getCategories()
