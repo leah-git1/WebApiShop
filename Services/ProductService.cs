@@ -37,5 +37,11 @@ namespace Services
             pageResponse.HasNextPage = position < numOfPages;
             return pageResponse;
         }
+
+        public async Task<List<MoreInfoProductDTO>> GetMostOrderedProducts(int count = 5)
+        {
+            List<ProductTbl> mostOrdered = await _iProductRepository.GetMostOrderedProducts(count);
+            return _mapper.Map<List<ProductTbl>, List<MoreInfoProductDTO>>(mostOrdered);
+        }
     }
 }

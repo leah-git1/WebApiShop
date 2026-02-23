@@ -32,5 +32,15 @@ namespace Repository
             return (products, total);
             
         }
+
+        public async Task<List<ProductTbl>> GetMostOrderedProducts(int count = 5)
+        {
+            return await _ShopContext.ProductTbls
+                .Include(p => p.OrderItemsTbls)
+                .Include(p => p.Category)
+                .OrderByDescending(p => p.OrderItemsTbls.Count)
+                .Take(count)
+                .ToListAsync();
+        }
     }
 }

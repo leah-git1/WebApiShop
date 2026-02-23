@@ -22,5 +22,19 @@ namespace WebApiShop.Controllers
         {
             return await _iProductService.getProducts(categoryIds, min_price, max_price, position, skip);
         }
+
+        [HttpGet("most-ordered")]
+        public async Task<ActionResult<List<MoreInfoProductDTO>>> GetMostOrderedProducts([FromQuery] int count = 5)
+        {
+            try
+            {
+                List<MoreInfoProductDTO> products = await _iProductService.GetMostOrderedProducts(count);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace Services
     public interface IProductService
     {
         Task<PageResponseDTO<LessInfoProductDTO>> getProducts(int?[] categoryIds, int? min_price, int? max_price, int position, int skip);
+        Task<List<MoreInfoProductDTO>> GetMostOrderedProducts(int count = 5);
     }
 }
