@@ -2,28 +2,23 @@
 using DTOs;
 using Entities;
 using Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
     public class ProductService : IProductService
     {
-        IProductRepository _iProductRepository;
-        IMapper _mapper;
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository iProductRepository, IMapper mapper)
+        public ProductService(IProductRepository productRepository, IMapper mapper)
         {
-            this._iProductRepository = iProductRepository;
+            _productRepository = productRepository;
             _mapper = mapper;
         }
 
         public async Task<PageResponseDTO<LessInfoProductDTO>> getProducts(int?[] categoryIds, int? min_price, int? max_price, int position, int skip)
         {
-            (List<ProductTbl>, int) response = await _iProductRepository.getProducts(categoryIds, min_price, max_price, position, skip);
+            (List<ProductTbl>, int) response = await _productRepository.getProducts(categoryIds, min_price, max_price, position, skip);
             List<LessInfoProductDTO> data = _mapper.Map<List<ProductTbl>, List<LessInfoProductDTO>>(response.Item1);
             PageResponseDTO<LessInfoProductDTO> pageResponse = new();
             pageResponse.Data = data;
@@ -40,7 +35,7 @@ namespace Services
 
         public async Task<List<MoreInfoProductDTO>> GetMostOrderedProducts(int count = 5)
         {
-            List<ProductTbl> mostOrdered = await _iProductRepository.GetMostOrderedProducts(count);
+            List<ProductTbl> mostOrdered = await _productRepository.GetMostOrderedProducts(count);
             return _mapper.Map<List<ProductTbl>, List<MoreInfoProductDTO>>(mostOrdered);
         }
     }

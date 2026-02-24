@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-//using NLog.Web;
 using Repository;
 using Services;
 using WebApiShop;
@@ -18,33 +17,18 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
-//builder.Host.UseNLog();
 builder.Services.AddDbContext<ShopContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-// Add services to the container.
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
-//builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.MapOpenApi();
-//    app.UseSwaggerUI(options =>
-//    {
-//        options.SwaggerEndpoint("/openapi/v1.json", "My API V1");
-//    });
-//}
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
-
-// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 

@@ -2,10 +2,6 @@
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
-using System.Text.Json;
-//using NLog.Web;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApiShop.Controllers
 {
@@ -13,39 +9,38 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        IUsersServices _iUsersServices;
+        private readonly IUsersServices _usersServices;
         private readonly ILogger<UsersController> _logger;
-        public UsersController(IUsersServices iUsersServices, ILogger<UsersController> logger) { 
-            _iUsersServices = iUsersServices;
+
+        public UsersController(IUsersServices usersServices, ILogger<UsersController> logger)
+        {
+            _usersServices = usersServices;
             _logger = logger;
         }
-        
-
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> Get(int ind)
+        public async Task<ActionResult<UserDTO>> Get(int id)
         {
-            UserDTO user = await _iUsersServices.getUserById(ind);
-            if(user == null)            
+            UserDTO user = await _usersServices.getUserById(id);
+            if (user == null)
                 return NotFound();
             return Ok(user);
         }
 
-        
         // POST api/<UserController>
         [HttpPost]
         public async Task<ActionResult<UserDTO>> Post([FromBody] UserToRegisterDTO user)
         {
-            UserDTO postUser = await _iUsersServices.registerUser(user);
+            UserDTO postUser = await _usersServices.registerUser(user);
             if (postUser == null)
                 return BadRequest();
             return CreatedAtAction(nameof(Get), new { id = postUser.UserId }, postUser);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Post([FromBody] UserLog userToLog)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] UserLog userToLog)
         {
-            UserDTO user = await _iUsersServices.loginUser(userToLog);
+            UserDTO user = await _usersServices.loginUser(userToLog);
             if (user == null)
             {
                 _logger.LogInformation("User not exist");
@@ -57,13 +52,12 @@ namespace WebApiShop.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async  Task<ActionResult> Put([FromBody] UserToRegisterDTO userToUpdate, int id)
+        public async Task<ActionResult> Put([FromBody] UserToRegisterDTO userToUpdate, int id)
         {
-            UserDTO user = await _iUsersServices.updateUser(userToUpdate, id);
+            UserDTO user = await _usersServices.updateUser(userToUpdate, id);
             if (user == null)
                 return BadRequest("Password is not strong enough");
             return NoContent();
-
         }
     }
 }
