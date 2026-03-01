@@ -10,10 +10,10 @@ namespace Repository
 {
     public class ProductRepository : IProductRepository
     {
-        ShopContext _ShopContext;
-        public ProductRepository(ShopContext ShopContext)
+        private readonly ShopContext _shopContext;
+        public ProductRepository(ShopContext shopContext)
         {
-            this._ShopContext = ShopContext;
+            this._shopContext = shopContext;
         }
 
         public async Task<(List<ProductTbl>,int total)> getProducts(int?[] categoryIds, int? minPrice, int? maxPrice, int position=1, int skip=10)

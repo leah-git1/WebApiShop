@@ -11,6 +11,7 @@ namespace DTOs
         int UserId,
         string FirstName,
         string LastName,
+        [EmailAddress]
         string UserName,           
         string Password
     );
