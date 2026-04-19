@@ -3,35 +3,34 @@ using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {
-        IOrderService _iOrderService;
-        public OrderController(IOrderService iOrderService)
+        private readonly IOrderService _orderService;
+
+        public OrderController(IOrderService orderService)
         {
-            _iOrderService = iOrderService;
+            _orderService = orderService;
         }
 
         // GET api/<OrderController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderMoreInfoDTO>> getOrderById(int id)
+        public async Task<ActionResult<OrderMoreInfoDTO>> GetOrderById(int id)
         {
-            return await _iOrderService.getOrderById(id);
+            return await _orderService.getOrderById(id);
         }
+
         // POST api/<OrderController>
         [HttpPost]
-        public async Task<ActionResult<OrderDTO>> AddOrder(CreateOrderDTO order)
+        public async Task<ActionResult<OrderDTO>> AddOrder([FromBody] CreateOrderDTO order)
         {
-            OrderDTO postOrder = await _iOrderService.AddOrder(order);
+            OrderDTO postOrder = await _orderService.AddOrder(order);
             if (postOrder == null)
                 return BadRequest();
-            return CreatedAtAction(nameof(getOrderById), new { id = postOrder.OrderId }, postOrder);
-            //return await _iOrderService.Invite(order);
+            return CreatedAtAction(nameof(GetOrderById), new { id = postOrder.OrderId }, postOrder);
         }
     }
 }

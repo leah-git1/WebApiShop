@@ -2,24 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        ICategoryService _iCategoryServices;
-        public CategoryController(ICategoryService iCategoryServices)
+        private readonly ICategoryService _categoryServices;
+
+        public CategoryController(ICategoryService categoryServices)
         {
-            _iCategoryServices = iCategoryServices;
+            _categoryServices = categoryServices;
         }
+
         // GET: api/<CategoryController>
         [HttpGet]
-        public async Task<List<CategoriesTbl>> getCategories()
+        public async Task<List<CategoriesTbl>> GetCategories()
         {
-            return await _iCategoryServices.getCategories();
+            return await _categoryServices.getCategories();
         }
     }
 }
