@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories
+namespace Repository
 {
     public class RatingRepository : IRatingRepository
     {
-        private readonly ApiDBContext _apiDbContext;
-        public RatingRepository(ApiDBContext apiDbContext)
+        private readonly ShopContext _apiDbContext;
+        public RatingRepository(ShopContext apiDbContext)
         {
             _apiDbContext = apiDbContext;
         }
